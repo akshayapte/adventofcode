@@ -45,5 +45,57 @@ def part_one():
     print(len(visited))
 
 
+def part_two():
+    
+    sensor_data = {}
+    distances = {}
+    with open("15.txt", "r") as inp:
+        for line in inp.readlines():
+            parse_input(line, sensor_data)
+
+    beacons = sensor_data.values()
+    areas = []
+    for sensor, beacon in sensor_data.items():
+        dist = manhattan_distance(sensor, beacon)
+
+        areas.append({
+            "top": (sensor[0], sensor[1]-dist),
+            "bottom": (sensor[0], sensor[1]+dist),
+            "left": (sensor[0]-dist, sensor[1]),
+            "right": (sensor[0]+dist, sensor[1]),
+            "dist": dist
+        })
+
+
+    for y in range(4000000+1):
+        intervals = []
+
+        for area in areas:
+            if area["top"][1] <= y <= area["bottom"][1]:
+                min_y = min(y, area["left"][1])
+                max_y = max(y, area["left"][1])
+                rem = area["dist"]*2+1 - (max_y - min_y) * 2
+
+                start = area["left"][0] + (max_y - min_y)
+                intervals.append((start, start + rem - 1))
+
+        intervals.sort()
+
+        stack = []
+        for start, end in intervals:
+            if stack and (stack[-1][1] >= start or start-stack[-1][1] == 1):
+                if stack[-1][1] >= start:
+                    stack[-1][1] = max(stack[-1][1], end)
+                else:
+                    stack[-1][1] = end
+            else:
+                stack.append([start, end])
+
+        if len(stack) == 2:
+            print((stack[0][-1]+1)*4000000 + y)
+
+
+
 if __name__ == "__main__":
     part_one()
+    part_two()
