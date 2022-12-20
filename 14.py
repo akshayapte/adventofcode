@@ -1,13 +1,13 @@
 import time
 
 
-def simulate_sand(matrix):
+def simulate_sand(matrix, part):
 	ans = 0
 	length = len(matrix)
+	
 	while True:
 		i, j = 0, 500
 		while True:
-			
 			if i == length-1:
 				break
 			if matrix[i+1][j] == ".":
@@ -21,7 +21,9 @@ def simulate_sand(matrix):
 			else:
 				break
 
-		if i == length-1:
+		if part == 1 and i == length-1:
+			return ans
+		elif part == 2 and matrix[0][500] == "O":
 			return ans
 
 		matrix[i][j] = "O"
@@ -55,18 +57,27 @@ def draw_rock(matrix, coordinates):
 
 
 
-def part_one():
+def solve():
 	with open("14.txt", "r") as inp:
 
-		matrix = matrix = [ [ "." for i in range(600) ] for j in range(200) ]
+
+		# part 1
+		matrix = matrix = [ [ "." for i in range(1000) ] for j in range(1000) ]
 		for line in inp.readlines():
 			coordinates = [i.strip() for i in line.split(" -> ")]
 			coordinates = [i.split(",") for i in coordinates]
 			draw_rock(matrix, coordinates)
 		
-		ans = simulate_sand(matrix)
-		print(ans)
+		ans1 = simulate_sand(matrix, part = 1)
+		print(ans1)
 
+		for x in range(0,1000):
+			matrix[184][x] = "#"
+
+		ans2 = simulate_sand(matrix, part = 2)
+		print(ans1 + ans2)
+
+		# Draws cave
 		f = open("14_op.txt", "w")
 		matrix = ["".join(i) for i in matrix]
 		for line in matrix:
@@ -75,7 +86,5 @@ def part_one():
 		f.close()
 
 
-
-
 if __name__ == "__main__":
-	part_one()
+	solve()
