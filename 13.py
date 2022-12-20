@@ -44,6 +44,31 @@ def part_one():
 
 	print(ans)
 
+def part_two():
+	with open("13.txt", "r") as inp:
+		packets = []
+		for packet in inp.readlines():
+			if packet == "\n":
+				continue
+			else:
+				packets.append(json.loads(packet.strip()))
+
+		index1 = 1
+		index2 = 1
+
+		for packet in packets:
+			if in_order(packet, [[2]]):
+				index1 += 1
+
+		packets.append([[2]])
+
+		for packet in packets:
+			if in_order(packet, [[6]]):
+				index2 += 1
+
+		print(index1*index2)
+
 
 if __name__ == "__main__":
 	part_one()
+	part_two()
