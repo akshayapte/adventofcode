@@ -37,7 +37,7 @@ def get_solutions(valves, time=30, chosen = {}, curr = "AA"):
 
 
 def part_one():
-	mx = 0
+	mx1, mx2 = 0, 0
 	valves = {}
 	with open("16.txt", "r") as inp:
 		for line in inp.readlines():
@@ -53,10 +53,17 @@ def part_one():
 		floyd_warshall(valves, rooms)
 		good_valves = [i for i in valves.keys() if valves[i]["flow"] != 0]
 		
+		# part 1
 		for choice in get_solutions(set(good_valves)):
-			mx = max(mx, score(valves, choice))
+			mx1 = max(mx1, score(valves, choice))
+		print(mx1)
 
-		print(mx)
+		# part2 (Can be optimized)
+		for c1 in get_solutions(set(good_valves), 26):
+			for c2 in get_solutions(set(good_valves), 26):
+				if not set(c1.keys()).intersection(set(c2.keys())):
+					mx2 = max(mx2, score(valves, c1)+score(valves, c2))
+		print(mx2)
 
 		
 
