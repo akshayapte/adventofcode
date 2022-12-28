@@ -108,7 +108,9 @@ def bfs(blueprint_id, blueprint, state, time_limit = 24):
 
 
 def main():
-	ans = 0
+
+	# part 1
+	ans1, ans2 = 0, 1
 	with open("19.txt", "r") as inp:
 		blueprints = {}
 		for line in inp.readlines():
@@ -128,9 +130,30 @@ def main():
 		 "time": 0
 		}
 		quality = bfs(blueprint_id, blueprint, state)
-		ans += quality
+		ans1 += quality
 
-	print(ans)
+	print(ans1)
+
+	# part 2
+
+	for blueprint_id, blueprint in blueprints.items():
+		if blueprint_id >= 4:
+			break
+		state = {
+		 "ore": 0,
+		 "clay": 0,
+		 "obsidian": 0,
+		 "geode": 0,
+		 "ore_robot":1,
+		 "clay_robot":0,
+		 "obsidian_robot":0,
+		 "geode_robot":0,
+		 "time": 0
+		}
+		quality = bfs(blueprint_id, blueprint, state, time_limit = 32)
+		ans2 *= (quality//blueprint_id)
+
+	print(ans2)
 		
 
 if __name__ == '__main__':
